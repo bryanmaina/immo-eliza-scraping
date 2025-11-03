@@ -10,6 +10,7 @@ cs.store(name="base_config", node=AppConfig)
 
 log = logging.getLogger(__name__)
 
+
 @hydra.main(version_base=None, config_path="conf", config_name="config")
 def main(cfg: AppConfig):
     log.info(f"Stating '{cfg.name}'!")
