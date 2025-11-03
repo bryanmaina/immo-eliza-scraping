@@ -15,7 +15,7 @@
    python -m pip install -r requirements.txt
    ```
 
-## Developement
+## Development
 > [!NOTE]
 > Please format your code before submitting a pull request.
 
