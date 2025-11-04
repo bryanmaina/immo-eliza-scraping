@@ -6,3 +6,4 @@ class AppConfig:
     name: str
     min_scrape_delay: int
     max_scrape_delay: int
+    user_agent: str
