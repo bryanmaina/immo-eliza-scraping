@@ -11,10 +11,11 @@ log = logging.getLogger(__name__)
 
 
 class ZimmoScrapper(BaseScraper):
-    def __init__(self, website_url: str, municipalities: list[str], driver: WebDriver):
-        super().__init__(website_url) #Calling BaseScraper.__init__
-        self.driver = driver
+    def __init__(self, municipalities: list[str], driver: WebDriver):
+        super().__init__("https://www.zimmo.be/nl/") #Calling BaseScraper.__init__
+        self.driver
         self.municipalities = municipalities
+        #municipalities = ["Brusel","Laken","","","","","","","","",]
     
     def for_sale(self, municipalities): #Enter municipality and open search results page
         input_box = WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[placeholder='Zoek een gemeente']")))
@@ -58,7 +59,6 @@ class ZimmoScrapper(BaseScraper):
         try:
             layout_items = self.driver.find_elements(By.CSS_SELECTOR, "#tab-detail > div.container.main-container > div > div.pand-info-wrapper.main-features-wrapper.align-block-left > div > div > div:nth-child(2) > section > div")
             layout_texts = [item.text.strip().lower() for item in layout_items]
-
             terrace_area = "terras" in layout_texts or "terrace" in layout_texts  # handles both Dutch and English
 
         except Exception:
