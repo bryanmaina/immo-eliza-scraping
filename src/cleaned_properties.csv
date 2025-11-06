@@ -1,3 +1,6 @@
-property_id;locality_name;postal_code;price;property_type;type_of_sale;number_of_rooms;living_area;equipped_kitchen;furnished;open_fire;terrace_area;garden_area;number_of_facades;swimming_pool;state_of_building
-00 €;House;normal sale;4;180 m2;Yes;No;Yes;20 m²;50 m2;3;No;Good
-00 €;Villa;life sale;5;250m2;yes;no;yes;30m2;120 m²;4;no;To renovate
+property_id,locality_name,postal_code,price,property_type,number_of_rooms,living_area,equipped_kitchen,furnished,open_fire,terrace_area,garden_area,number_of_facades,swimming_pool,state_of_building
+KE123,Antwerp,2000,450,House,4,180,1,0,1,20,50,3,0,Good
+KE124,Brussels,1000,550000,Apartment,2,85,0,1,0,0,0,2,1,New
+KE125,Ghent,9000,1200000,Villa,5,250,1,0,1,30,120,4,0,To renovate
+KE126,Liège,4000,300000,House,3,120,1,1,0,10,0,2,0,Fair
+KE127,Namur,5000,0,Duplex,0,95,0,0,1,0,25,0,0,Excellent
