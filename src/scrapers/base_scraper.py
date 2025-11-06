@@ -1,13 +1,60 @@
+import json
+import os
 from abc import ABC, abstractmethod
 
-from selenium.webdriver.chrome.webdriver import WebDriver
+from selenium.webdriver.remote.webdriver import WebDriver
 
 from models import PropertyData
 
 
 class BaseScraper(ABC):
-    def __init__(self, website_url: str) -> None:
+    def __init__(
+        self,
+        name: str,
+        website_url: str,
+        cache_dir: str = "data",
+    ) -> None:
         self.website_url = website_url
+        self.cache_dir = cache_dir
+        os.makedirs(self.cache_dir, exist_ok=True)
 
     @abstractmethod
     def scrape(self, driver: WebDriver) -> list[PropertyData]: ...
+
+    def save_point(self, data: PropertyData, last_url: str):
+        self.__save_inter_property(data)
+        self.__safe_last_visited_url(last_url)
+
+    def __save_inter_property(self, data: PropertyData):
+        cache_file = os.path.join(
+            self.cache_dir,
+            self.name,
+            f"{data['property_id']}_property.json",
+        )
+        with open(cache_file, mode="wb", buffering=1) as f:
+            json.dump(data, f)
+
+    def __safe_last_visited_url(self, last_url: str):
+        urls_file = os.path.join(
+            self.cache_dir,
+            self.name,
+            "all_urls.json",
+        )
+        with open(urls_file, mode="a+", buffering=1) as f:
+            f.write(last_url)
+
+    def get_last_visited_url(self) -> str:
+        try:
+            urls_file = os.path.join(
+                self.cache_dir,
+                self.name,
+                "all_urls.json",
+            )
+            with open(urls_file, mode="r") as f:
+                lines = f.readline()
+                if lines:
+                    return lines[-1].strip()
+                else:
+                    return None  # Or raise an exception for an empty file
+        except FileNotFoundError:
+            return None
