@@ -1,6 +1,6 @@
-property_id;locality_name;postal_code;price;property_type;type_of_sale;number_of_rooms;living_area;equipped_kitchen;furnished;open_fire;terrace_area;garden_area;number_of_facades;swimming_pool;state_of_building
-KE123;Antwerp;2000;450,00 €;House;normal sale;4;180 m2;Yes;No;Yes;20 m²;50 m2;3;No;Good
-KE124;Brussels;1000;550000 EUR;Apartment;normal sale;2;85 m²;No;Yes;No;;;2;Yes;New
-KE125;Ghent;9000;1.200.000,00 €;Villa;life sale;5;250m2;yes;no;yes;30m2;120 m²;4;no;To renovate
-KE126;Liège;4000;300000;House;normal sale;3;120 m2;YES;YES;NO;10;;2;NO;Fair
-KE127;Namur;5000;;Duplex;normal sale;;95 m²;No;;Yes;;25m²;;;Excellent
+property_id;locality_name;postal_code;price;property_type;number_of_rooms;living_area;equipped_kitchen;furnished;open_fire;terrace_area;garden_area;number_of_facades;swimming_pool;state_of_building
+KE123;Antwerp;2000;450,00 €;House;4;180 m2;Yes;No;Yes;20 m²;50 m2;3;No;Good
+KE124;Brussels;1000;550000 EUR;Apartment;2;85 m²;No;Yes;No;;;2;Yes;New
+KE125;Ghent;9000;1.200.000,00 €;Villa;5;250m2;yes;no;yes;30m2;120 m²;4;no;To renovate
+KE126;Liège;4000;300000;House;3;120 m2;YES;YES;NO;10;;2;NO;Fair
+KE127;Namur;5000;;Duplex;;95 m²;No;;Yes;;25m²;;;Excellent
