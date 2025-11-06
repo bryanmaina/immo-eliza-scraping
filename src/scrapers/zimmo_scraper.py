@@ -49,16 +49,16 @@ class ZimmoScrapper(BaseScraper):
             all_data.append(data)
         return all_data
 
-
-    def extract_data_from_url(self, url): #Collects data from a single listing page
+    #Collects data from a single listing page
+    def extract_data_from_url(self, url):
         self.driver.get(url)
         property_id = self.driver.find_element(By.CSS_SELECTOR, ".title-row p").text
         price = self.driver.find_element(By.CSS_SELECTOR, "div.price-box > div > span").text
-        property_type = self.driver.find_element(By.CSS_SELECTOR, "ul.main-features li:nth-child(3) .feature-value").text
         type_of_sale = self.driver.find_element(By.CSS_SELECTOR, " ").text
-        number_of_rooms = self.driver.find_element(By.CSS_SELECTOR, "ul.main-features li:nth-child(5) .feature-value").text
-        living_area = self.driver.find_element(By.CSS_SELECTOR, "ul.main-features li:nth-child(4) .feature-value").text
-        garden_area = self.driver.find_element(By.CSS_SELECTOR, "#remainder > div.info-list > div > div.col-xs-5.info-value > i").text
+        #property_type = self.driver.find_element(By.CSS_SELECTOR, "ul.main-features li:nth-child(3) .feature-value").text
+        #number_of_rooms = self.driver.find_element(By.CSS_SELECTOR, "ul.main-features li:nth-child(5) .feature-value").text
+        #living_area = self.driver.find_element(By.CSS_SELECTOR, "ul.main-features li:nth-child(4) .feature-value").text
+        #garden_area = self.driver.find_element(By.CSS_SELECTOR, "#remainder > div.info-list > div > div.col-xs-5.info-value > i").text
         
         # Split locality and postcode via regex
         full_address = self.driver.find_element(By.CSS_SELECTOR, "#main-features .section-title-block h2 span:first-child").text
@@ -67,18 +67,23 @@ class ZimmoScrapper(BaseScraper):
             post_code = match.group(1)
             locality_name = match.group(2)
         
-        #Search for state_of_building and checking the number of facades by categories "open","semi-open","closed"
+        #Searching for condition of building, type,living area, rooms, 
+        #checking the number of facades in Main features at the beginning of page
         main_features = self.driver.find_elements(By.CSS_SELECTOR, ".main-features li")
         data = {}
         for li in main_features:
             try:
                 label = li.find_element(By.CSS_SELECTOR, ".feature-label").text.strip().lower()
                 value = li.find_element(By.CSS_SELECTOR, ".feature-value").text.strip().lower()
-                data[label] = value
+                data[label] = value #Creating a dictionary with parameters from this block
             except:
-                continue #If a feature is missing, skip
+                continue 
             
-        state_of_building = data.get("staat van het gebouw", None)
+        state_of_building = data.get("Conditie", None)
+        property_type = data.get("Type", None)
+        living_area = data.get("Living area", None)
+        number_of_rooms = data.get("Slaapkamers", None)
+        
         number_of_facade = data.get("bebouwing", None)
 
         if number_of_facade == "gesloten":
@@ -88,7 +93,8 @@ class ZimmoScrapper(BaseScraper):
         elif number_of_facade == "halfopen":
             number_of_facade = 2
 
-        #Searching for properties key word ("terrace") in Layout list  
+
+        #Searching for key word ("terrace") in Layout block  
         try:
             layout_items = self.driver.find_elements(By.CSS_SELECTOR, "#tab-detail .section-title-block")
             layout_texts = [item.text.strip().lower() for item in layout_items]
@@ -98,13 +104,14 @@ class ZimmoScrapper(BaseScraper):
             layout_texts = []
             terrace_area = None
 
-        #Searching for properties key words in main description 
+        #Searching for other key words in Main description 
         try:
             overview_text = self.driver.find_element(By.CSS_SELECTOR,"#description > div > p").text.lower()
             equipped_kitchen = "ingerichte keuken" in overview_text or "equipped kitchen" in overview_text
             furnished = "gemeubeld" in overview_text or "furnished" in overview_text
             open_fire = "haard" in overview_text or "fireplce" in overview_text
             swimming_pool = "zwembad" in overview_text or "swimming pool" in overview_text
+            garden_area = "tuin" in overview_text or "garden" in overview_text
             
         except Exception:
             overview_text = ""
