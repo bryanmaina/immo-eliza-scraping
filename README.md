@@ -6,17 +6,15 @@ A virtual real estate company "Immo Eliza" wants to develop a machine learning m
 
 Our first task was to build a dataset gathering information about at least 10000 properties all over Belgium. This dataset is used later to train our prediction model.
 
-It was suggested to use the Immoweb site, but since that was not working we moved to Realo and Zimmo.
+We looked into different immo sites, such as Immoweb, Immovlan, Realo and Zimmo, but limited our final output.
 
-The final dataset is a csv file with at least the following 18 columns:
+The final dataset is a csv file with the following columns:
 
 - Property ID
 - Locality name
 - Postal code
 - Price
 - Type of property (house or apartment)
-- Subtype of property (bungalow, chalet, mansion, ...)
-- Type of sale (note: exclude life sales)
 - Number of rooms
 - Living area (area in m²)
 - Equipped kitchen (No - 0/ Yes - 1)
@@ -72,9 +70,9 @@ The final dataset is a csv file with at least the following 18 columns:
 
 We planned our project in Trello (https://trello.com/b/pXNAM8iq/data-collection-stage)
 
-We were asked to make a private Github repository (https://github.com/bryanmaina/immo-eliza-scraping) with access for the team and the coach, and will make it public after completion of the project.
+We created a private Github repository (https://github.com/bryanmaina/immo-eliza-scraping) with access for the team and the coach, and will make it public after completion of the project.
 
-During the week, Brian focused on Git and scraping the Realo site, Anna focused on Trello and scraping the Zimmo site, & Kristin started with reviewing the Selenium training documentation, then looked into identifiers on different immo websites and fields for duplicate identification, and on a script for data processing. 
+During the week, Brian focused on Git and scraping the Realo site, which was later decided to be stopped while shifting to Immoweb; Anna focused on Trello and scraping the Zimmo site, & Kristin started with reviewing the Selenium training documentation, then looked into identifiers on different immo websites and fields for duplicate identification, and on a script for data processing. 
 
 > [!NOTE]
 > *Don't forget to format your code before submitting a pull request!*
@@ -90,7 +88,7 @@ Add when this would be used <---
 ## Sources
 
 We are scraping the following immo sites:
-- Realo (https://www.realo.be/en)
+- Immoweb (https://www.immoweb.be)
 - Zimmo (https://www.zimmo.be/)
 
 ## Visuals <--- will we add any?
