@@ -17,7 +17,7 @@ def clean_numeric_column(df, column, pattern='[^\\d.]'):
 # column names copied from models.py to use in this script for reference:
     # property_id: str
     # locality_name: str
-    # post_code: str
+    # post_code: str - we must update this label to postal_code per instructions
     # price: str - remove possible currency
     # property_type: str
     # type_of_sale: str
@@ -34,7 +34,7 @@ def clean_numeric_column(df, column, pattern='[^\\d.]'):
 
 # MAIN CLASS
 class DataProcessing:
-    def __init__(self, file_path=None):
+    def __init__(self, file_path='test_properties.csv'):
         # update line of code above with local CSV file path to load data <---
         self.df = pd.read_csv(file_path)
 
@@ -43,20 +43,25 @@ class DataProcessing:
         self.filter_out_type('life sale')
         self.clean_areas()
         self.convert_yes_no_columns()
+        self.remove_duplicates()
+        self.remove_empty_rows()
         self.fill_missing()
 
     def clean_price(self): # method to clean the price column
         if 'price' in self.df.columns:
             self.df = clean_numeric_column(self.df, 'price')
+            print("Cleaning price fields...")
 
     def filter_out_type(self, property_type): # method to remove rows with a specific property type e.g. life sale
         if 'property_type' in self.df.columns:
             self.df = self.df[self.df['property_type'].str.lower() != property_type.lower()]
+            print("Filtering out life sale property types...")
 
     def clean_areas(self): # method to clean the area columns
         for col in ['living_area', 'terrace_area', 'garden_area']:
             if col in self.df.columns:
                 self.df = clean_numeric_column(self.df, col)
+            print("Cleaning area fields...")
 
     def convert_yes_no_columns(self): # method to convert yes/no to 1/0
         columns = ['furnished', 'equipped_kitchen', 'open_fire', 'swimming_pool'] # check column names <---
@@ -66,9 +71,20 @@ class DataProcessing:
                 self.df[col] = self.df[col].map({'yes': 1, 'no': 0})
                 # fill NaN after mapping - when needed
                 self.df[col].fillna(0, inplace=True)
+                print("Changing Yes/No to 1/0...")
 
-    def fill_missing(self): # method to fill NaN with zero or other defaults - is this OK? <---
+    def remove_duplicates(self):
+        self.df.drop_duplicates(inplace=True)
+        print("Removing duplicates...")
+
+    def remove_empty_rows(self):
+        self.df.dropna(how='all', inplace=True)
+        print("Removing empty rows...")
+
+    def fill_missing(self):
         self.df.fillna(0, inplace=True)
+        print("Filling missing fields...")
 
-    def save_to_csv(self, output_path): # method to create the output file, update file path <---
+    def save_to_csv(self, output_path='cleaned_properties.csv'): # method to create the output file, update file path <---
         self.df.to_csv(output_path, index=False)
+        print("Saving cleaned output as csv ...")
