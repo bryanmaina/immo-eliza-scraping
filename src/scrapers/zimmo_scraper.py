@@ -13,7 +13,7 @@ log = logging.getLogger(__name__)
 
 class ZimmoScraper(BaseScraper):
     def __init__(self, municipalities: list[str] = None):
-        super().__init__(name=ZimmoScraper, website_url="https://www.zimmo.be/nl/") #Calling BaseScraper.__init__
+        super().__init__(name = "ZimmoScraper", website_url="https://www.zimmo.be/nl/") #Calling BaseScraper.__init__
         self.municipalities = municipalities or []
         log.warning("This app name is: ")
         #municipalities = ["Antwerpen","Brugge","Brussel","Gent","Hasselt","Leuven","Aalst","Borgerhout","De Panne","Genk","Knokke-Heist","Mechelen","Oostende","Turnhout"]
@@ -46,14 +46,14 @@ class ZimmoScraper(BaseScraper):
            
             page_urls = [listing.get_attribute("href") for listing in listings]
             urls.extend(page_urls)
-            last_resort_page = ""
+            #last_resort_page = ""
             try:
                 driver.save_screenshot("next_button.png")
                 next_button = WebDriverWait(driver, 15).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "li.last > a")))
-                last_resort_page = next_button.get_attribute("href")
+                #last_resort_page = next_button.get_attribute("href")
                 driver.execute_script("arguments[0].click();", next_button)
                 WebDriverWait(driver, 5).until(EC.staleness_of(listings[0]))# Wait for page reload
-                self.save_last_visited_search(last_resort_page)
+                #self.save_last_visited_search(last_resort_page)
                            
             except Exception as e:
                 log.error(e)
@@ -63,18 +63,37 @@ class ZimmoScraper(BaseScraper):
     def scrape_current_page(self, driver): #By iteration, each url opens in a tab
         urls = self.collect_listing_urls(driver)
         all_data = []
+        log.info(f"Found {len(urls)} listing URLs to scrape") #Checking whether there is an issue with the url collection
         for url in urls:
             data = self.extract_data_from_url(url, driver)
-            all_data.append(data)
+            if data:
+                all_data.append(data)
+            print(url)
+        log.info(f"Scraped {len(all_data)} valid listings") #Checking whether there is an issue with the url collection
         return all_data
    
     #Collects data from a single listing page
     def extract_data_from_url(self, url, driver):
         driver.get(url)
+        log.info(url)
+        #First checks price if available    
         try:
             property_id = driver.find_element(By.CSS_SELECTOR, ".title-row p").text
-            price = driver.find_element(By.CSS_SELECTOR, "div.price-box > div > span").text
-            #type_of_sale = driver.find_element(By.CSS_SELECTOR, " ").text
+        except Exception:
+            log.info(f"Skipping listing – no property ID found: {url}")
+            return None
+        try:
+            price = driver.find_element(By.CSS_SELECTOR, "div.price-box > div > span").text.strip().lower()
+            if not price or "on request" in price or "Prijs op aanvraag" in price:
+                log.info(f"Skipping listing without valid price: {url}")
+                return None
+        except Exception:
+            log.info(f"Skipping listing – price element not found: {url}")
+            return None
+            #except Exception:
+                #log.info(f"Skipping listing – price element not found: {url}")
+                #return None
+                #type_of_sale = driver.find_element(By.CSS_SELECTOR, " ").text
 
         #property_type = self.driver.find_element(By.CSS_SELECTOR, "ul.main-features li:nth-child(3) .feature-value").text
         #number_of_rooms = self.driver.find_element(By.CSS_SELECTOR, "ul.main-features li:nth-child(5) .feature-value").text
@@ -82,11 +101,14 @@ class ZimmoScraper(BaseScraper):
         #garden_area = self.driver.find_element(By.CSS_SELECTOR, "#remainder > div.info-list > div > div.col-xs-5.info-value > i").text
         
         # Split locality and postcode via regex
-            full_address = driver.find_element(By.CSS_SELECTOR, "#main-features .section-title-block h2 span:first-child").text
+        try:
+            full_address = driver.find_element(By.CSS_SELECTOR, "#main-features > div > div.title-row > div.section-title-block > h2 > span:nth-child(1)").text
+            ##main-features > .section-title-block > h2 > span:first-child"
             match = re.search(r'(\d{4})\s+([A-Za-zÀ-ÿ\-]+)', full_address)
             if match:
                 post_code = match.group(1)
                 locality_name = match.group(2)
+                #main-features > div > div.title-row > div.section-title-block > h2 > span:nth-child(1)
         
             #Searching for condition of building, type,living area, rooms, 
             #checking the number of facades in Main features at the beginning of page
@@ -158,4 +180,5 @@ class ZimmoScraper(BaseScraper):
             }
         except Exception as e:
             log.info(e)
-            
+            return None
+                
