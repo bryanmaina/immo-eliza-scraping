@@ -41,7 +41,7 @@ def clean_numeric_column(df, column, pattern='[^\\d.,]', as_int=False, is_price=
 
 # MAIN CLASS
 class DataProcessing:
-    def __init__(self, file_path='../data/raw/test_properties.csv'):
+    def __init__(self, file_path='../data/raw/xxx.csv'):
         # update line of code above with local CSV file path to load data <---
         # ensure old df is cleared so a new file will truly be read (and not a cached file)
         if hasattr(self, 'df'):
@@ -151,6 +151,6 @@ class DataProcessing:
                     self.df[col] = self.df[col].fillna('')
         print("\nFilling missing fields...")
 
-    def save_to_csv(self, output_path='../data/cleaned/cleaned_test_properties.csv'): # method to create the output file, update file path <---
+    def save_to_csv(self, output_path='../data/cleaned/cleaned_property_data.csv'): # method to create the output file, update file path <---
         self.df.to_csv(output_path, index=False)
         print("\nSaving cleaned output as csv ...")

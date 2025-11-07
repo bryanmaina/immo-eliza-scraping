@@ -7,6 +7,7 @@ from conf.config import AppConfig
 from scraper_service import ScraperService
 from scrapers.base_scraper import BaseScraper
 from scrapers.realo_scraper import RealoScraper
+from data_processing import DataProcessing
 
 cs = ConfigStore.instance()
 cs.store(name="base_config", node=AppConfig)
@@ -31,6 +32,10 @@ def main(cfg: AppConfig):
         # Do something with the data
         # 1. Use the data processor to clean the data
         # 2. use the csv export to export to csv
+        data_processing = DataProcessing(scraped_data)
+        cleaned_data = data_processing.clean()
+        # export the csv file
+        
         log.info("Do some")
     log.info(f"Stopping '{cfg.name}'!")
 
