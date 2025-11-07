@@ -31,8 +31,8 @@ class ZimmoScraper(BaseScraper):
             #self.for_sale(driver, municipality)
             #data.extend(self.scrape_current_page(driver))
         #return data
-        self.for_sale(driver,"Gent")
-        return self.scrape_current_page(WebDriver)
+        self.for_sale(driver,"Antwerpen")
+        return self.scrape_current_page(driver)
         
 
     def for_sale(
@@ -58,7 +58,7 @@ class ZimmoScraper(BaseScraper):
         self, driver: WebDriver
     ):  # For each listing, per each page, grab the href of the listing (no click yet)
         urls = []
-        driver.get_screenshot_as_file("./test.png")
+        #driver.get_screenshot_as_file(filename = "./test.png")
         while True:
             if len(urls) > 30:
                 break

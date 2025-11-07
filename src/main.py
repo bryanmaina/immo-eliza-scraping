@@ -30,7 +30,7 @@ def main(cfg: AppConfig):
     scraper_service.close_driver()
 
     if scraped_data:
-        log.info(scraped_data[0,70])
+        log.info(scraped_data)
         # Do something with the data
         # 1. Use the data processor to clean the data
         # 2. use the csv export to export to csv
