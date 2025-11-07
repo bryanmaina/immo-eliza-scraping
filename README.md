@@ -50,17 +50,26 @@ The final dataset is a csv file with the following columns:
 .
 ├── data/
 │   ├── cleaned/
-│   │   └── xxxxx.csv
+│   │   └── cleaned_property_data.csv
 │   └── raw/
-│       └── xxxxx.csv
-├── scraper/
-│   └── xxxxx.py
+│       └── scraped_data.csv
 ├── src/
-│   ├── xxxxx.py
-│   ├── xxxxx.py
-│   └── xxxxx.py
+│   ├── conf/
+│   │   ├── __init__.py
+│   │   ├── config.py
+│   │   └── config.yaml
+│   ├── scrapers/
+│   │   ├── __init__.py
+│   │   ├── basescraper.py
+│   │   ├── realoscraper.py
+│   ├── __init__.py
+│   ├── data_processing.ipynb
+│   ├── data_processing.py
+│   ├── error_handling.py
+│   ├── main.py
+│   ├── models.py
+│   └── scraper_service.py
 ├── .gitignore
-├── main.py
 ├── PLAN.md
 ├── README.md
 └── requirements.txt
@@ -90,10 +99,6 @@ Add when this would be used <---
 We are scraping the following immo sites:
 - Immoweb (https://www.immoweb.be)
 - Zimmo (https://www.zimmo.be/)
-
-## Visuals <--- will we add any?
-
-
 
 ## Contributors
 
