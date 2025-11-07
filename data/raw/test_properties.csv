@@ -1,0 +1,32 @@
+property_id;locality_name;postal_code;price;property_type;type_of_sale;number_of_rooms;living_area;equipped_kitchen;furnished;open_fire;terrace_area;garden_area;number_of_facades;swimming_pool;state_of_building
+BE1001;Brussels;1000;450.000,00 €;apartment;normal sale;3;120 m²;Yes;no;n;15.0 m²;0.0 m²;1;no;new
+BE1002;Antwerp;2000;1.250.500,50 €;house;life sale;3;95 m²;no;Yes;Y;;50.0;;no;renovated
+BE1003;Ghent;9000;450.000,00 EUR;villa;notary sale;;150 m²;;No;n;20;100.0 m²;4;Yes;old
+SLC13;;;;;;;;;;;;;;;
+BE1004;Bruges;8000;850.000,00 €;house;normal sale;4;110 m²;YES;YES;no;15.0 m²;25.0;3;No;modern
+BE1005;Leuven;3000;325.000,00 €;apartment;life sale;2;80 m²;y;n;n;0;0.0;2;no;modern
+BE1006;Mechelen;2800;550.000,00 EUR;townhouse;normal sale;3;105 m²;yes;Yes;Y;10.0 m²;15.0;;Yes;old
+BE1007;Louvain-la-Neuve;1348;475.000,50 €;apartment;normal sale;2;;no;n;n;;5.0;1;No;new
+BE1010;Liège;4000;375.000,75 EUR;villa;notary sale;5;140 m²;yes;No;Y;20.0;200.0;4;Yes;old
+BE1011;Charleroi;6000;300.000,00 €;house;normal sale;3;90 m²;;Yes;n;10.0;30.0;2;n;modern
+BE1012;Bruges;8000;850.000,00 €;house;normal sale;4;110 m²;;NO;no;15.0;25.0 m²;3;Yes;modern
+BE1013;Leuven;3000;325.000,00 €;apartment;life sale;2;80 m²;y;n;n;m²  0.0;0.0;2;;modern
+BE1014;Ghent;9000;upon request;villa;notary sale;4;150 m²;yes;No;Y;20.0;100.0;4;no;old
+SLC01;Ghent;9000;450.000,00 EUR;villa;notary sale;;150 m²;;No;n;20.0 m²;100.0 m²;4;Yes;old
+SLC02;Bruges;8000;850000;house;normal sale;4;110 m²;YES;NO;no;10;25.0;3;No;modern
+SLC03;Leuven;3000;325.000,00 €;apartment;life sale;2;80 m²;y;n;n;0.0 m²;0.0;2;no;modern
+SLC04;Mechelen;2800;550.000,00 EUR;townhouse;normal sale;3;105 m²;yes;Yes;Y;10.0 m²;15.0;2;Yes;renovated
+SLC05;Louvain-la-Neuve;1348;475.000,50 €;apartment;normal sale;2;;no;n;n;;5.0;1;No;new
+SLC06;Antwerp;2000;1.250.500,50 €;house;life sale;4;95 m²;no;Yes;Y;;50.0 m²;;NO;renovated
+SLC07;Brussels;1000;450.000,00 €;apartment;normal sale; ;120 m²;Yes;;n;15.0;0.0;1;n;new
+SLC08;Liège;4000;375.000,75 EUR;villa;notary sale;5;140 m²;yes;No;Y;20.0;200.0;4;Yes;old
+SLC09;Charleroi;6000;300000;house;normal sale;3;90 m²;no;Yes;n;10.0;30.0;2;n;old
+SLC10;Bruges;8000;850.000,00 €;house;normal sale;4;110 m²;;NO;no;15.0;25.0 m²;3;Yes;modern
+SLC11;Leuven;3000;325.000,00 €;apartment;life sale;2;80 m²;y;n;n;m²  0.0;0.0;2;;new
+SLC12;Ghent;9000;upon request;villa;notary sale;4;150 m²;yes;No;n;20.0;100.0;4;no;old
+BE1015;Mechelen;2800;550.000,00 EUR;townhouse;normal sale;3;105 m²;yes;Yes;Y;10.0 m²;15.0 m²;2.0;Yes;old
+BE1016;Louvain-la-Neuve;1348;475.000,50 €;apartment;normal sale;;;no;n;;;5.0;1;No;new
+BE1017;Liège;4000;375.000,75 EUR;villa;notary sale;5;140 m²;yes;No;Y;20.0;200.0 m²;4;no;old
+BE1018;Charleroi;6000;250000;house;normal sale;3;90 m²;no;Yes;n;10.0;30.0;2;Yes;modern
+BE1019;Antwerp;2000;;house;life sale;4;95 m²;no;Yes;;;m² 50.0;;No;renovated
+BE1020;Brussels;1000;450.000,00 €;apartment;normal sale;3;120 m²;Yes;no;n;15.0 m²;0.0;1;no;new
