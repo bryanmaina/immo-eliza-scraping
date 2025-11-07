@@ -34,7 +34,7 @@ def main(cfg: AppConfig):
         # 2. use the csv export to export to csv
         data_processing = DataProcessing(scraped_data)
         cleaned_data = data_processing.clean()
-        # export the csv file
+        # export the csv file - this is done within the processing script - does it need to come out?
         
         log.info("Do some")
     log.info(f"Stopping '{cfg.name}'!")

@@ -41,7 +41,7 @@ def clean_numeric_column(df, column, pattern='[^\\d.,]', as_int=False, is_price=
 
 # MAIN CLASS
 class DataProcessing:
-    def __init__(self, file_path='../data/raw/xxx.csv'):
+    def __init__(self, file_path='../data/raw/scraped_data.csv'):
         # update line of code above with local CSV file path to load data <---
         # ensure old df is cleared so a new file will truly be read (and not a cached file)
         if hasattr(self, 'df'):
