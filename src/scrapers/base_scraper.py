@@ -21,7 +21,7 @@ class BaseScraper(ABC):
         self.name = name
         self.website_url = website_url
         self.cache_dir = cache_dir
-        os.makedirs(self.cache_dir, exist_ok=True)
+        os.makedirs(os.path.join(self.cache_dir, self.name), exist_ok=True)
 
     @abstractmethod
     def scrape(self, driver: WebDriver) -> list[PropertyData]: ...
@@ -33,7 +33,6 @@ class BaseScraper(ABC):
     def __save_inter_property(self, data: PropertyData):
         cache_file = os.path.join(
             self.cache_dir,
-            self.name,
             f"{data['property_id']}_property.json",
         )
         with open(cache_file, mode="wb", buffering=1) as f:
@@ -42,7 +41,6 @@ class BaseScraper(ABC):
     def __save_last_visited_url(self, last_url: str):
         urls_file = os.path.join(
             self.cache_dir,
-            self.name,
             LAST_VISITED_URL_FILE_NAME,
         )
         with open(urls_file, mode="a+", buffering=1) as f:
@@ -52,7 +50,6 @@ class BaseScraper(ABC):
         try:
             urls_file = os.path.join(
                 self.cache_dir,
-                self.name,
                 ALL_PROPERTY_URLS_FILE_NAME,
             )
             with open(urls_file, mode="r") as f:
@@ -67,7 +64,6 @@ class BaseScraper(ABC):
     def save_last_visited_search(self, last_url_info: dict) -> dict:
         urls_file = os.path.join(
             self.cache_dir,
-            self.name,
             LAST_VISITED_SEARCH_FILE_NAME,
         )
         with open(urls_file, mode="w", buffering=1) as f:
@@ -77,7 +73,6 @@ class BaseScraper(ABC):
         try:
             urls_file = os.path.join(
                 self.cache_dir,
-                self.name,
                 LAST_VISITED_SEARCH_FILE_NAME,
             )
             with open(urls_file, mode="r") as f:
