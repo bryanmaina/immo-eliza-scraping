@@ -12,15 +12,16 @@ log = logging.getLogger(__name__)
 
 
 class ZimmoScraper(BaseScraper):
-    def __init__(self, municipalities: list[str]=[]):
-        super().__init__("https://www.zimmo.be/nl/") #Calling BaseScraper.__init__
-        self.municipalities = municipalities 
+    def __init__(self, municipalities: list[str] = None):
+        super().__init__(name=ZimmoScraper, website_url="https://www.zimmo.be/nl/") #Calling BaseScraper.__init__
+        self.municipalities = municipalities or []
+        log.warning("This app name is: ")
         #municipalities = ["Antwerpen","Brugge","Brussel","Gent","Hasselt","Leuven","Aalst","Borgerhout","De Panne","Genk","Knokke-Heist","Mechelen","Oostende","Turnhout"]
     
     def scrape(self, driver: WebDriver) -> list[PropertyData]:
         driver.get(self.website_url)
         WebDriverWait(driver, 60).until(EC.visibility_of_element_located((By.CSS_SELECTOR,'#didomi-notice-agree-button'))).click()
-        self.for_sale(driver,"Gent")
+        self.for_sale(driver,"Antwerpen")
         self.scrape_current_page(driver)
 
     def for_sale(self, driver: WebDriver, municipalities): #Enter municipality and open search results page
@@ -37,7 +38,7 @@ class ZimmoScraper(BaseScraper):
     def collect_listing_urls(self, driver:WebDriver): #For each listing, per each page, grab the href of the listing (no click yet)
         urls = []
         while True:
-            if len(urls) > 150:
+            if len(urls) > 70:
                 break
 
             container = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR, ".property-results")))
@@ -45,13 +46,14 @@ class ZimmoScraper(BaseScraper):
            
             page_urls = [listing.get_attribute("href") for listing in listings]
             urls.extend(page_urls)
-
+            last_resort_page = ""
             try:
                 driver.save_screenshot("next_button.png")
-
                 next_button = WebDriverWait(driver, 15).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "li.last > a")))
+                last_resort_page = next_button.get_attribute("href")
                 driver.execute_script("arguments[0].click();", next_button)
-                WebDriverWait(driver, 5).until(EC.staleness_of(listings[0])) # Wait for page reload
+                WebDriverWait(driver, 5).until(EC.staleness_of(listings[0]))# Wait for page reload
+                self.save_last_visited_search(last_resort_page)
                            
             except Exception as e:
                 log.error(e)
