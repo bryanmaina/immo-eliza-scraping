@@ -18,6 +18,7 @@ class BaseScraper(ABC):
         website_url: str,
         cache_dir: str = "data",
     ) -> None:
+        self.name = name
         self.website_url = website_url
         self.cache_dir = cache_dir
         os.makedirs(self.cache_dir, exist_ok=True)
