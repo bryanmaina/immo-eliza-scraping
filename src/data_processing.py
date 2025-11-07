@@ -71,7 +71,7 @@ class DataProcessing:
     def clean_price(self): # method to clean the price column
         if 'price' in self.df.columns:
             self.df = clean_numeric_column(self.df, 'price', as_int=True, is_price=True)
-            print("\nCleaning price fields...")
+            print("Cleaning price fields...")
 
     # def filter_out_type(self, type_of_sale): # method to remove rows with a specific property type e.g. life sale
     #     if 'type_of_sale' in self.df.columns:
@@ -85,7 +85,7 @@ class DataProcessing:
                 # Remove units like 'm2', 'm²' (case-insensitive)
                 self.df[col] = self.df[col].astype(str).str.replace(r'\s*m[²2]', '', regex=True)
                 self.df = clean_numeric_column(self.df, col, as_int=True)
-            print("\nCleaning area fields...")
+            print("Cleaning area fields...")
   
     def convert_yes_no_columns(self): # method to convert yes/no to 1/0
         yes_no_map = {'yes': 1, 'y': 1, 'no': 0, 'n': 0}
@@ -100,13 +100,13 @@ class DataProcessing:
                     .fillna(0)
                     .astype(int)
                 )
-        print("\nConverting Yes/No columns to 1/0 integers...")
+        print("Converting Yes/No columns to 1/0 integers...")
 
     def clean_other_numeric_columns(self): # convert other numeric columns to integers
         for col in ['number_of_rooms', 'number_of_facades']:
             if col in self.df.columns:
                 self.df = clean_numeric_column(self.df, col, as_int=True)
-        print("\nCleaning other numeric fields...")
+        print("Cleaning other numeric fields...")
 
     def remove_duplicates(self): # method toemove duplicates based on all columns except property_id
         cols_to_check = [col for col in self.df.columns if col != 'property_id']
@@ -114,7 +114,7 @@ class DataProcessing:
         duplicates_mask = self.df.duplicated(subset=cols_to_check, keep=False)
         num_duplicates = duplicates_mask.sum()
         if num_duplicates > 0:
-            print(f"\nFound {num_duplicates} duplicate rows")
+            print(f"\nFound {num_duplicates} duplicate row(s)")
             # print(self.df[duplicates_mask].sort_values(by=cols_to_check).head(10)) # showing first 10 duplicates
         else:
             print("\nNo duplicate rows found.")
@@ -122,11 +122,24 @@ class DataProcessing:
         print("Removing duplicates...")
         print(f"Number of rows left after removing duplicates = {len(self.df)}")
 
-    def remove_empty_rows(self): # method to remove rows where Property_ID is missing or all other fields are empty
+    def remove_empty_rows(self): # method to remove rows where property_id is missing or all other fields are empty
         critical_cols = [col for col in self.df.columns if col != 'property_id']
-        self.df.dropna(subset=['property_id'], inplace=True)  # Remove rows without property_id
-        self.df.dropna(subset=critical_cols, how='all', inplace=True)  # Remove rows where all other fields empty
-        print("\nRemoving empty rows...")
+        empty_mask = pd.Series(False, index=self.df.index)
+        for col in critical_cols:
+            if self.df[col].dtype in [int, float]:
+                col_empty = self.df[col].isna()
+            else:
+                col_empty = self.df[col].astype(str).str.strip().eq('')
+            empty_mask |= col_empty
+        missing_id_mask = self.df['property_id'].isna() | (self.df['property_id'].astype(str).str.strip() == '') # remove rows without property_id
+        num_missing = missing_id_mask.sum()
+        print(f"\nFound {num_missing} row(s) with missing property_id")
+        self.df = self.df.loc[~missing_id_mask]
+        rows_to_drop = self.df[empty_mask].index # remove rows where all other fields empty
+        num_empty_rows = len(rows_to_drop)
+        print(f"Found {num_empty_rows} empty row(s)")
+        self.df.drop(index=rows_to_drop, inplace=True)
+        print("Removing empty rows...")
         print(f"Number of rows left after removing empty rows = {len(self.df)}")
 
     def fill_missing(self): # method to fill missing fields except for property_id
