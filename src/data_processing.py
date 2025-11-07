@@ -1,5 +1,4 @@
 import pandas as pd
-import re
 
 # HELPER FUNCTION
 def clean_numeric_column(df, column, pattern='[^\\d.,]', as_int=False, is_price=False): 
@@ -9,10 +8,12 @@ def clean_numeric_column(df, column, pattern='[^\\d.,]', as_int=False, is_price=
     # property_id should not go through this function, as it is expected to be a combination of letters and numbers
     # create a temporary cleaned string version
     df[column + '_clean'] = df[column].astype(str).replace(pattern, '', regex=True)
+
     if is_price:
-        # Remove dots as thousands separator, replace comma with dot for decimals
-        df[column + '_clean'] = df[column + '_clean'].str.replace('.', '', regex=False)  # remove thousands sep
-        df[column + '_clean'] = df[column + '_clean'].str.replace(',', '.', regex=False)  # convert decimal comma
+        # remove thousands separator dots
+        df[column + '_clean'] = df[column + '_clean'].str.replace(r'(?<=\d)\.(?=\d)', '', regex=True)
+        # convert decimal comma to dot
+        df[column + '_clean'] = df[column + '_clean'].str.replace(',', '.', regex=False)
     # convert cleaned string to numeric
     df[column] = pd.to_numeric(df[column + '_clean'], errors='coerce')
     # drop the temporary clean column
@@ -40,20 +41,22 @@ def clean_numeric_column(df, column, pattern='[^\\d.,]', as_int=False, is_price=
 
 # MAIN CLASS
 class DataProcessing:
-    def __init__(self, file_path='test_properties.csv'):
+    def __init__(self, file_path='../data/raw/test_properties.csv'):
         # update line of code above with local CSV file path to load data <---
-        # need to check if csv is truly comma-separated (MacOS may create ;-separated)
+        # ensure old df is cleared so a new file will truly be read (and not a cached file)
+        if hasattr(self, 'df'):
+            del self.df
+        # auto-detect separator in CSV file
         with open(file_path, 'r', encoding='utf-8') as f:
             first_line = f.readline()
-            if ';' in first_line:
-                sep = ';'
-            else:
-                sep = ','
-        self.df = pd.read_csv(file_path, sep=sep, dtype={"property_id": str})
-        print("Before any cleaning:")
-        print(self.df.dtypes)
+            sep = ';' if ';' in first_line else ','  # choose ';' if present, else ','
+        # load full csv file
+        self.df = pd.read_csv(file_path, sep=sep, dtype={"property_id": str}, low_memory=False)
+        print("Detected separator:", repr(sep))
+        print("\nBefore any cleaning:")
+        print(self.df.dtypes,"\n")
         print(self.df.head(5))
-        print("Rows loaded:", len(self.df))
+        print("\nNumber of rows raw data loaded:", len(self.df))
 
     def process_data(self): # main method to process data, further methods detailed below
         self.clean_price()
@@ -68,14 +71,13 @@ class DataProcessing:
     def clean_price(self): # method to clean the price column
         if 'price' in self.df.columns:
             self.df = clean_numeric_column(self.df, 'price', as_int=True, is_price=True)
-            print("Cleaning price fields...")
-            print(f"After cleaning price, rows = {len(self.df)}")
+            print("\nCleaning price fields...")
 
     # def filter_out_type(self, type_of_sale): # method to remove rows with a specific property type e.g. life sale
     #     if 'type_of_sale' in self.df.columns:
     #         self.df = self.df[self.df['type_of_sale'].str.lower() != type_of_sale.lower()]
     #         print("Filtering out life sale property types...")
-    #         print(f"After filtering out life sale property type, rows = {len(self.df)}")
+    #         print(f"Number of rows left after filtering out life sale property type = {len(self.df)}")
 
     def clean_areas(self): # method to clean the area columns
         for col in ['living_area', 'terrace_area', 'garden_area']:
@@ -83,9 +85,8 @@ class DataProcessing:
                 # Remove units like 'm2', 'm²' (case-insensitive)
                 self.df[col] = self.df[col].astype(str).str.replace(r'\s*m[²2]', '', regex=True)
                 self.df = clean_numeric_column(self.df, col, as_int=True)
-            print("Cleaning area fields...")
-            print(f"After cleaning area, rows = {len(self.df)}")
-
+            print("\nCleaning area fields...")
+  
     def convert_yes_no_columns(self): # method to convert yes/no to 1/0
         yes_no_map = {'yes': 1, 'y': 1, 'no': 0, 'n': 0}
         for col in ['furnished', 'equipped_kitchen', 'open_fire', 'swimming_pool']:
@@ -99,28 +100,34 @@ class DataProcessing:
                     .fillna(0)
                     .astype(int)
                 )
-        print("Converting Yes/No columns to 1/0 integers...")
-        print(f"After converting Yes/No, rows = {len(self.df)}")
+        print("\nConverting Yes/No columns to 1/0 integers...")
 
     def clean_other_numeric_columns(self): # convert other numeric columns to integers
         for col in ['number_of_rooms', 'number_of_facades']:
             if col in self.df.columns:
                 self.df = clean_numeric_column(self.df, col, as_int=True)
-        print("Cleaning other numeric fields...")
-        print(f"After cleaning other numeric fields, rows = {len(self.df)}")
+        print("\nCleaning other numeric fields...")
 
     def remove_duplicates(self): # method toemove duplicates based on all columns except property_id
         cols_to_check = [col for col in self.df.columns if col != 'property_id']
+        # Find duplicates
+        duplicates_mask = self.df.duplicated(subset=cols_to_check, keep=False)
+        num_duplicates = duplicates_mask.sum()
+        if num_duplicates > 0:
+            print(f"\nFound {num_duplicates} duplicate rows")
+            # print(self.df[duplicates_mask].sort_values(by=cols_to_check).head(10)) # showing first 10 duplicates
+        else:
+            print("\nNo duplicate rows found.")
         self.df.drop_duplicates(subset=cols_to_check, keep='first', inplace=True)
         print("Removing duplicates...")
-        print(f"After removing duplicates, rows = {len(self.df)}")
+        print(f"Number of rows left after removing duplicates = {len(self.df)}")
 
     def remove_empty_rows(self): # method to remove rows where Property_ID is missing or all other fields are empty
         critical_cols = [col for col in self.df.columns if col != 'property_id']
         self.df.dropna(subset=['property_id'], inplace=True)  # Remove rows without property_id
         self.df.dropna(subset=critical_cols, how='all', inplace=True)  # Remove rows where all other fields empty
-        print("Removing empty rows...")
-        print(f"After removing empty rows, rows = {len(self.df)}")
+        print("\nRemoving empty rows...")
+        print(f"Number of rows left after removing empty rows = {len(self.df)}")
 
     def fill_missing(self): # method to fill missing fields except for property_id
         for col in self.df.columns:
@@ -129,9 +136,8 @@ class DataProcessing:
                     self.df[col] = self.df[col].fillna(0)
                 else:
                     self.df[col] = self.df[col].fillna('')
-        print("Filling missing fields...")
-        print(f"After filling missing fields, rows = {len(self.df)}")
+        print("\nFilling missing fields...")
 
-    def save_to_csv(self, output_path='cleaned_properties.csv'): # method to create the output file, update file path <---
+    def save_to_csv(self, output_path='../data/cleaned/cleaned_test_properties.csv'): # method to create the output file, update file path <---
         self.df.to_csv(output_path, index=False)
-        print("Saving cleaned output as csv ...")
+        print("\nSaving cleaned output as csv ...")
