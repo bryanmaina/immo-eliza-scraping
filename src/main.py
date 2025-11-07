@@ -8,6 +8,7 @@ from scraper_service import ScraperService
 from scrapers.base_scraper import BaseScraper
 from scrapers.realo_scraper import RealoScraper
 from data_processing import DataProcessing
+from scrapers.zimmo_scraper import ZimmoScraper
 
 cs = ConfigStore.instance()
 cs.store(name="base_config", node=AppConfig)
@@ -21,7 +22,8 @@ def main(cfg: AppConfig):
 
     # Add a new Scraper here everytime you implement one
     scrapers: list[BaseScraper] = [
-        RealoScraper(),
+        #RealoScraper(),
+        ZimmoScraper(),
     ]
 
     scraper_service = ScraperService(scrapers=scrapers, user_agent=cfg.user_agent)
@@ -29,13 +31,14 @@ def main(cfg: AppConfig):
     scraper_service.close_driver()
 
     if scraped_data:
+        log.info(scraped_data)
         # Do something with the data
         # 1. Use the data processor to clean the data
         # 2. use the csv export to export to csv
         data_processing = DataProcessing(scraped_data)
         cleaned_data = data_processing.clean()
         # export the csv file - this is done within the processing script - does it need to come out?
-        
+
         log.info("Do some")
     log.info(f"Stopping '{cfg.name}'!")
 

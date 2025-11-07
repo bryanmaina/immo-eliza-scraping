@@ -212,3 +212,4 @@ __marimo__/
 outputs/
 .idea
 downloaded_files
+.vscode/launch.json
