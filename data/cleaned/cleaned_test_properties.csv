@@ -1,0 +1,24 @@
+property_id,locality_name,postal_code,price,property_type,type_of_sale,number_of_rooms,living_area,equipped_kitchen,furnished,open_fire,terrace_area,garden_area,number_of_facades,swimming_pool,state_of_building
+BE1001,Brussels,1000.0,450000,apartment,normal sale,3,120,1,0,0,15,0,1,0,new
+BE1002,Antwerp,2000.0,1250500,house,life sale,3,95,0,1,1,0,50,0,0,renovated
+BE1003,Ghent,9000.0,450000,villa,notary sale,0,150,0,0,0,20,100,4,1,old
+BE1004,Bruges,8000.0,850000,house,normal sale,4,110,1,1,0,15,25,3,0,modern
+BE1005,Leuven,3000.0,325000,apartment,life sale,2,80,1,0,0,0,0,2,0,modern
+BE1006,Mechelen,2800.0,550000,townhouse,normal sale,3,105,1,1,1,10,15,0,1,old
+BE1007,Louvain-la-Neuve,1348.0,475000,apartment,normal sale,2,0,0,0,0,0,5,1,0,new
+BE1010,Liège,4000.0,375000,villa,notary sale,5,140,1,0,1,20,200,4,1,old
+BE1011,Charleroi,6000.0,300000,house,normal sale,3,90,0,1,0,10,30,2,0,modern
+BE1012,Bruges,8000.0,850000,house,normal sale,4,110,0,0,0,15,25,3,1,modern
+BE1014,Ghent,9000.0,0,villa,notary sale,4,150,1,0,1,20,100,4,0,old
+SLC02,Bruges,8000.0,850000,house,normal sale,4,110,1,0,0,10,25,3,0,modern
+SLC04,Mechelen,2800.0,550000,townhouse,normal sale,3,105,1,1,1,10,15,2,1,renovated
+SLC06,Antwerp,2000.0,1250500,house,life sale,4,95,0,1,1,0,50,0,0,renovated
+SLC07,Brussels,1000.0,450000,apartment,normal sale,0,120,1,0,0,15,0,1,0,new
+SLC09,Charleroi,6000.0,300000,house,normal sale,3,90,0,1,0,10,30,2,0,old
+SLC11,Leuven,3000.0,325000,apartment,life sale,2,80,1,0,0,0,0,2,0,new
+SLC12,Ghent,9000.0,0,villa,notary sale,4,150,1,0,0,20,100,4,0,old
+BE1015,Mechelen,2800.0,550000,townhouse,normal sale,3,105,1,1,1,10,15,2,1,old
+BE1016,Louvain-la-Neuve,1348.0,475000,apartment,normal sale,0,0,0,0,0,0,5,1,0,new
+BE1017,Liège,4000.0,375000,villa,notary sale,5,140,1,0,1,20,200,4,0,old
+BE1018,Charleroi,6000.0,250000,house,normal sale,3,90,0,1,0,10,30,2,1,modern
+BE1019,Antwerp,2000.0,0,house,life sale,4,95,0,1,0,0,50,0,0,renovated
